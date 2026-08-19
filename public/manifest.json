@@ -1,0 +1,10 @@
+{
+  "name": "PipiViajes",
+  "short_name": "PipiViajes",
+  "description": "Apunta los gastos desglosados de un viaje desde el móvil, sin conexión, para importarlos luego en PipiGastos",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait"
+}
