@@ -1,12 +1,12 @@
 import React from 'react';
-import { Plane, Wallet2, ChevronRight } from 'lucide-react';
+import { Plane, Wallet, Wallet2, ChevronRight } from 'lucide-react';
 
 export default function Home({ onSelectViajes, onSelectGastos }) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 px-4 pt-10 pb-10">
       <div className="flex items-center gap-2.5 mb-1">
         <div className="bg-gradient-to-tr from-emerald-500 to-teal-400 p-2 rounded-xl text-slate-950">
-          <Wallet2 className="w-5 h-5" />
+          <Wallet className="w-5 h-5" />
         </div>
         <h1 className="text-xl font-extrabold">PipiGastos Móvil</h1>
       </div>
