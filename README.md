@@ -1,9 +1,14 @@
-# PipiViajes (módulo móvil)
+# PipiGastos Móvil (módulo móvil)
 
-Mini-app independiente para apuntar los gastos desglosados de un viaje desde el móvil,
-sin conexión a internet ni al servidor de casa. Todo se guarda en el propio móvil
-(localStorage del navegador). Al terminar el viaje, se exporta un `.json` que luego
-se sube en PipiGastos desde Modo Viaje → "Importar desde móvil".
+Mini-app independiente para apuntar gastos desde el móvil, sin conexión a internet ni al
+servidor de casa. Todo se guarda en el propio móvil (localStorage del navegador). Tiene dos
+modos:
+
+- **Gastos Sueltos**: para el día a día (Comunes, Personales Xtina, Personales Javi). Al
+  llegar a casa se exporta un `.json` y se sube en PipiGastos desde **Importar desde Móvil**
+  (en la barra lateral, sección General) — crea las transacciones reales de golpe.
+- **Viajes**: para apuntar los gastos desglosados de un viaje concreto. Al terminar el viaje
+  se exporta un `.json` que se sube en PipiGastos desde Modo Viaje → "Importar desde móvil".
 
 ## Probarlo en local
 
@@ -31,9 +36,22 @@ npm run dev
    `https://<tu-usuario>.github.io/<nombre-del-repo>/`
 6. Desde el móvil, abre esa URL en Safari/Chrome y usa "Añadir a pantalla de inicio" para tenerla como un icono más, a pantalla completa.
 
-## Uso
+## Uso — Gastos Sueltos
 
-1. **Nuevo Viaje** → nombre y fechas.
+1. Desde la pantalla de inicio, entra en **Gastos Sueltos**.
+2. **Apuntar Gasto** cuantas veces haga falta (fecha, importe, concepto, cuenta —
+   Comunes/Xtina/Javi—, estado y opcionalmente deuda).
+3. Al llegar a casa, pulsa **Exportar** → descarga un `.json` con el nombre
+   `gastos_sueltos_<fecha>.json`.
+4. En PipiGastos → **Importar desde Móvil** (barra lateral) → selecciona ese `.json`, asigna
+   un código a cada línea (por cuenta) y pulsa **Importar**. Crea las transacciones reales
+   directamente, tal como si las hubieras apuntado a mano.
+5. Vuelve al móvil y pulsa **Vaciar lista** — solo después de comprobar que se han importado
+   bien en casa.
+
+## Uso — Viajes
+
+1. Desde la pantalla de inicio, entra en **Viajes** → **Nuevo Viaje** → nombre y fechas.
 2. Dentro del viaje, **Apuntar Gasto** cuantas veces haga falta (fecha, importe, concepto, forma de pago, y opcionalmente deuda).
 3. Al terminar, pulsa **Exportar** → descarga un `.json` con el nombre `viaje_<nombre>_<fecha>.json`.
 4. En casa, en PipiGastos → Modo Viaje → **Importar desde móvil** → selecciona ese `.json`.
@@ -45,5 +63,7 @@ npm run dev
 
 - Si borras la app del móvil o los datos del navegador antes de exportar, se pierde lo que
   no se haya exportado — no hay copia en ningún otro sitio.
-- Puedes tener varios viajes guardados a la vez en el móvil; cada uno se exporta por separado.
-- Reimportar el mismo `.json` dos veces da un aviso en vez de duplicar el viaje.
+- Gastos Sueltos y Viajes se guardan por separado en el móvil; puedes tener varios viajes
+  guardados a la vez, cada uno se exporta por separado.
+- Reimportar el mismo `.json` de un viaje dos veces da un aviso en vez de duplicarlo. El
+  import de Gastos Sueltos no tiene esa detección — no reimportes el mismo fichero dos veces.

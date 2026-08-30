@@ -29,3 +29,9 @@ export const DEUDA_OPTIONS = [
   { value: 'Pagas tú, te lo debo todo', label: 'Pagas tú, te lo debo todo' },
   { value: 'Pago yo, me lo debes todo', label: 'Pago yo, me lo debes todo' },
 ];
+
+export const CUENTA_OPTIONS = [
+  { value: 'comunes', label: 'Comunes' },
+  { value: 'personales', label: 'Personales (Xtina)' },
+  { value: 'personales-javi', label: 'Personales (Javi)' },
+];

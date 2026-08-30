@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Plane, Plus, ChevronRight, Trash2 } from 'lucide-react';
+import { Plane, Plus, ChevronRight, Trash2, ArrowLeft } from 'lucide-react';
 import { formatCurrency } from '../format';
 
-export default function TripList({ viajes, onAdd, onDelete, onOpen }) {
+export default function TripList({ viajes, onAdd, onDelete, onOpen, onBack }) {
   const [showForm, setShowForm] = useState(false);
   const [nombre, setNombre] = useState('');
   const [fechaInicio, setFechaInicio] = useState(new Date().toISOString().split('T')[0]);
@@ -21,6 +21,11 @@ export default function TripList({ viajes, onAdd, onDelete, onOpen }) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 px-4 pt-6 pb-10">
       <div className="flex items-center gap-2.5 mb-1">
+        {onBack && (
+          <button onClick={onBack} className="p-1.5 -ml-1.5 text-slate-400 active:text-slate-100">
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+        )}
         <div className="bg-gradient-to-tr from-emerald-500 to-teal-400 p-2 rounded-xl text-slate-950">
           <Plane className="w-5 h-5" />
         </div>
