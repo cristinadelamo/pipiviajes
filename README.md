@@ -5,8 +5,9 @@ servidor de casa. Todo se guarda en el propio móvil (localStorage del navegador
 modos:
 
 - **Gastos Sueltos**: para el día a día (Comunes, Personales Xtina, Personales Javi). Al
-  llegar a casa se exporta un `.json` y se sube en PipiGastos desde **Importar desde Móvil**
-  (en la barra lateral, sección General) — crea las transacciones reales de golpe.
+  llegar a casa, con el móvil en la red de casa, se **sincroniza directamente** contra la
+  principal (sin fichero de por medio) — o, como respaldo, se puede exportar un `.json` y
+  subirlo a mano en PipiGastos → **Importar desde Móvil** (barra lateral, sección General).
 - **Viajes**: para apuntar los gastos desglosados de un viaje concreto. Al terminar el viaje
   se exporta un `.json` que se sube en PipiGastos desde Modo Viaje → "Importar desde móvil".
 
@@ -41,13 +42,20 @@ npm run dev
 1. Desde la pantalla de inicio, entra en **Gastos Sueltos**.
 2. **Apuntar Gasto** cuantas veces haga falta (fecha, importe, concepto, cuenta —
    Comunes/Xtina/Javi—, estado y opcionalmente deuda).
-3. Al llegar a casa, pulsa **Exportar** → descarga un `.json` con el nombre
-   `gastos_sueltos_<fecha>.json`.
-4. En PipiGastos → **Importar desde Móvil** (barra lateral) → selecciona ese `.json`, asigna
-   un código a cada línea (por cuenta) y pulsa **Importar**. Crea las transacciones reales
-   directamente, tal como si las hubieras apuntado a mano.
-5. Vuelve al móvil y pulsa **Vaciar lista** — solo después de comprobar que se han importado
-   bien en casa.
+3. Al llegar a casa, con el móvil conectado a la red de casa: pulsa el icono ⚙️ arriba a la
+   derecha para poner la URL de la principal (ej. `https://192.168.31.29:3050`) y pulsa
+   **Sincronizar**. Cada gasto se sube directamente como transacción real (con un código por
+   defecto por cuenta) y, si se confirma, se borra ya del móvil. Los que fallen se quedan en
+   la lista para reintentar.
+   - La primera vez, si el navegador da un aviso de certificado no seguro, abre esa misma URL
+     directamente en el navegador del móvil y acéptalo antes de sincronizar — si no, el
+     `fetch()` de la sincronización fallará aunque la web se vea bien.
+4. Si no hay red o falla la sincronización, usa **Exportar respaldo (.json)** → descarga un
+   `.json` con el nombre `gastos_sueltos_<fecha>.json` (sin borrar nada de la lista) y súbelo
+   a mano en PipiGastos → **Importar desde Móvil** (barra lateral) → asigna un código a cada
+   línea (por cuenta) y pulsa **Importar**.
+5. Si has usado el `.json`, vuelve al móvil y pulsa **Vaciar lista** — solo después de
+   comprobar que se han importado bien en casa (sincronizar los borra solo).
 
 ## Uso — Viajes
 

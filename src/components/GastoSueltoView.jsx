@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Plus, Trash2, Pencil, Check, X, Download, Wallet2 } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Pencil, Check, X, Wallet2, RefreshCw, AlertTriangle, CheckCircle2, Settings, Download } from 'lucide-react';
 import { formatCurrency } from '../format';
 import { METODO_PAGO_GROUPS, DEUDA_OPTIONS, CUENTA_OPTIONS } from '../constants';
+import useServidor from '../useServidor';
 
 const cuentaLabel = (v) => CUENTA_OPTIONS.find(c => c.value === v)?.label || v;
+
+const mesPagoFromFecha = (fecha) => (fecha && fecha.length === 10) ? `${fecha.slice(2, 4)}${fecha.slice(5, 7)}` : null;
 
 export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onClearAll, onBack }) {
   const todayStr = new Date().toISOString().split('T')[0];
@@ -17,7 +20,28 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
   const [editingId, setEditingId] = useState(null);
   const [editDraft, setEditDraft] = useState(null);
 
+  const servidor = useServidor();
+  const [showServidor, setShowServidor] = useState(!servidor.url);
+  const [syncing, setSyncing] = useState(false);
+  const [syncError, setSyncError] = useState(null);
+  const [syncResult, setSyncResult] = useState(null);
+
   const total = gastos.reduce((s, g) => s + Number(g.importe || 0), 0);
+
+  // Respaldo por si falla la red o el certificado: exporta el mismo .json que consume
+  // PipiGastos > Importar desde Móvil, sin borrar nada de la lista.
+  const handleExport = () => {
+    const data = { gastosSueltos: true, gastos };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `gastos_sueltos_${todayStr}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -51,17 +75,65 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
     setEditingId(null);
   };
 
-  const handleExport = () => {
-    const data = { gastosSueltos: true, gastos };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `gastos_sueltos_${todayStr}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  // Sincroniza directamente contra la principal por red local: trae los códigos de cada
+  // cuenta (para poder asignar uno por defecto, como exige la API), crea cada gasto como
+  // transacción real y, si se confirma, lo borra ya del móvil. Si un gasto falla se queda
+  // en la lista para reintentar; si falla la conexión de entrada, no se toca nada.
+  const handleSync = async () => {
+    if (!servidor.url || gastos.length === 0 || syncing) return;
+    setSyncing(true);
+    setSyncError(null);
+    setSyncResult(null);
+
+    try {
+      const codesRes = await fetch(`${servidor.url}/api/codes`);
+      if (!codesRes.ok) throw new Error(`No se pudieron leer los códigos (HTTP ${codesRes.status})`);
+      const codes = await codesRes.json();
+      const defaultCode = (cta) => {
+        const disponibles = codes.filter(c => (c.accountId || 'comunes') === cta);
+        return disponibles.find(c => c.code === 'COMP')?.code || disponibles[0]?.code || null;
+      };
+
+      let ok = 0;
+      const fallidos = [];
+      for (const g of gastos) {
+        const isPendienteEstado = g.estado === 'Pass Pendiente' || g.estado === 'Crédito Pendiente';
+        try {
+          const res = await fetch(`${servidor.url}/api/transactions`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: g.id,
+              accountId: g.cuenta,
+              fecha: g.fecha,
+              concepto: g.concepto,
+              mesPago: mesPagoFromFecha(g.fecha) || mesPagoFromFecha(todayStr),
+              code: defaultCode(g.cuenta),
+              importe: g.importe,
+              estado: g.estado,
+              pendiente: isPendienteEstado,
+              viajeId: null,
+              viajeCode: null,
+              deuda: g.deuda,
+              deudaImporte: null,
+            }),
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          onDelete(g.id);
+          ok++;
+        } catch {
+          fallidos.push(g.concepto);
+        }
+      }
+      setSyncResult({ ok, fallidos });
+    } catch (err) {
+      setSyncError(
+        err.message +
+        ' — comprueba que estás en la red de casa y que el certificado está aceptado (abre esa URL en el navegador antes de sincronizar).'
+      );
+    } finally {
+      setSyncing(false);
+    }
   };
 
   return (
@@ -73,19 +145,65 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
         <div className="bg-gradient-to-tr from-emerald-500 to-teal-400 p-1.5 rounded-lg text-slate-950">
           <Wallet2 className="w-4 h-4" />
         </div>
-        <h1 className="text-lg font-extrabold">Gastos Sueltos</h1>
-      </div>
-      <p className="text-xs text-slate-400 mb-4 ml-8">Se guarda solo en este móvil · exporta y vuélcalo en casa</p>
-
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-4 flex items-center justify-between">
-        <div>
-          <p className="text-[11px] text-slate-400 uppercase font-bold">Total sin volcar</p>
-          <p className="text-2xl font-black font-mono text-emerald-400">{formatCurrency(total)}</p>
-        </div>
-        <button onClick={handleExport} disabled={gastos.length === 0}
-          className="flex items-center gap-1.5 bg-emerald-500 active:bg-emerald-400 disabled:opacity-40 text-slate-950 font-bold text-xs px-3.5 py-2.5 rounded-xl">
-          <Download className="w-4 h-4" /> Exportar
+        <h1 className="text-lg font-extrabold flex-1">Gastos Sueltos</h1>
+        <button onClick={() => setShowServidor(s => !s)} className="p-1.5 text-slate-400 active:text-slate-100">
+          <Settings className="w-4 h-4" />
         </button>
+      </div>
+      <p className="text-xs text-slate-400 mb-4 ml-8">Se guarda solo en este móvil · sincroniza en casa</p>
+
+      {showServidor && (
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-4 space-y-1.5">
+          <label className="block text-[11px] text-slate-400">Servidor de la principal (en casa)</label>
+          <input
+            type="text"
+            value={servidor.url}
+            onChange={e => servidor.setUrl(e.target.value)}
+            placeholder="https://192.168.31.29:3050"
+            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm font-mono"
+          />
+          <p className="text-[10px] text-slate-500">
+            Solo funciona en la red de casa. Si es la primera vez, abre esa URL directamente
+            en este navegador y acepta el aviso del certificado antes de sincronizar.
+          </p>
+        </div>
+      )}
+
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-[11px] text-slate-400 uppercase font-bold">Total sin sincronizar</p>
+            <p className="text-2xl font-black font-mono text-emerald-400">{formatCurrency(total)}</p>
+          </div>
+          <div className="flex flex-col items-end gap-1.5">
+            <button onClick={handleSync} disabled={gastos.length === 0 || !servidor.url || syncing}
+              className="flex items-center gap-1.5 bg-emerald-500 active:bg-emerald-400 disabled:opacity-40 text-slate-950 font-bold text-xs px-3.5 py-2.5 rounded-xl">
+              <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} /> {syncing ? 'Sincronizando...' : 'Sincronizar'}
+            </button>
+            {gastos.length > 0 && (
+              <button onClick={handleExport} className="flex items-center gap-1 text-[10px] text-slate-500 active:text-slate-300">
+                <Download className="w-3 h-3" /> Exportar respaldo (.json)
+              </button>
+            )}
+          </div>
+        </div>
+
+        {syncError && (
+          <div className="flex items-start gap-2 bg-red-950/60 border border-red-800 text-red-300 text-[11px] p-2.5 rounded-xl">
+            <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            {syncError}
+          </div>
+        )}
+
+        {syncResult && (
+          <div className="flex items-start gap-2 bg-emerald-950/60 border border-emerald-800 text-emerald-300 text-[11px] p-2.5 rounded-xl">
+            <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <span>
+              {syncResult.ok} sincronizado{syncResult.ok !== 1 ? 's' : ''}.
+              {syncResult.fallidos.length > 0 && ` ${syncResult.fallidos.length} han fallado y se quedan en la lista: ${syncResult.fallidos.join(', ')}.`}
+            </span>
+          </div>
+        )}
       </div>
 
       <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3 mb-5">
@@ -146,10 +264,10 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
       </form>
 
       <div className="flex items-center justify-between mb-2 px-1">
-        <h3 className="text-xs font-bold text-slate-400">Gastos sin volcar ({gastos.length})</h3>
+        <h3 className="text-xs font-bold text-slate-400">Gastos sin sincronizar ({gastos.length})</h3>
         {gastos.length > 0 && (
           <button
-            onClick={() => { if (confirm('¿Vaciar la lista? Hazlo solo después de haber exportado e importado estos gastos en casa.')) onClearAll(); }}
+            onClick={() => { if (confirm('¿Vaciar la lista sin sincronizar? Se perderán los gastos que no se hayan volcado a la principal.')) onClearAll(); }}
             className="text-[11px] text-slate-500 active:text-red-500"
           >
             Vaciar lista
