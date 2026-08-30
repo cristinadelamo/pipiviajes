@@ -43,7 +43,7 @@ npm run dev
 2. **Apuntar Gasto** cuantas veces haga falta (fecha, importe, concepto, cuenta —
    Comunes/Xtina/Javi—, estado y opcionalmente deuda).
 3. Al llegar a casa, con el móvil conectado a la red de casa: pulsa el icono ⚙️ arriba a la
-   derecha para poner la URL de la principal (ej. `https://192.168.31.29:3050`) y pulsa
+   derecha para poner la URL de la principal (la IP/puerto de la red de casa) y pulsa
    **Sincronizar**. Cada gasto se sube directamente como transacción real (con un código por
    defecto por cuenta) y, si se confirma, se borra ya del móvil. Los que fallen se quedan en
    la lista para reintentar.

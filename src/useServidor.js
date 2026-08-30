@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 const STORAGE_KEY = 'kakebo_servidor_url';
 
-// URL de la principal en la red de casa (ej. https://192.168.31.29:3050), para poder
+// URL de la principal en la red de casa (ej. https://ip-de-tu-router:puerto), para poder
 // sincronizar los Gastos Sueltos directamente por red en vez de exportar un .json.
 export default function useServidor() {
   const [url, setUrlState] = useState(() => {

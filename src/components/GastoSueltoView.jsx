@@ -159,7 +159,7 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
             type="text"
             value={servidor.url}
             onChange={e => servidor.setUrl(e.target.value)}
-            placeholder="https://192.168.31.29:3050"
+            placeholder="https://ip-de-tu-router:puerto"
             className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm font-mono"
           />
           <p className="text-[10px] text-slate-500">
