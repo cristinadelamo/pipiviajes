@@ -43,21 +43,21 @@ export default function TripList({ viajes, onAdd, onDelete, onOpen, onBack }) {
       {showForm && (
         <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3 mb-5">
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Nombre del viaje *</label>
+            <label className="block text-xs text-slate-400 mb-1">Nombre del viaje *</label>
             <input autoFocus type="text" value={nombre} onChange={e => setNombre(e.target.value)}
               placeholder="ej. Terapia de Casariego" required
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm" />
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] text-slate-400 mb-1">Fecha inicio</label>
+              <label className="block text-xs text-slate-400 mb-1">Fecha inicio</label>
               <input type="date" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm" />
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base" />
             </div>
             <div>
-              <label className="block text-[11px] text-slate-400 mb-1">Fecha fin</label>
+              <label className="block text-xs text-slate-400 mb-1">Fecha fin</label>
               <input type="date" value={fechaFin} onChange={e => setFechaFin(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm" />
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base" />
             </div>
           </div>
           <button type="submit" className="w-full bg-emerald-500 active:bg-emerald-400 text-slate-950 font-bold py-2.5 rounded-xl">

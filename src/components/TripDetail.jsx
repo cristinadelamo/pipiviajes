@@ -78,7 +78,7 @@ export default function TripDetail({ viaje, onBack, onAddGasto, onUpdateGasto, o
 
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-4 flex items-center justify-between">
         <div>
-          <p className="text-[11px] text-slate-400 uppercase font-bold">Total del viaje</p>
+          <p className="text-xs text-slate-400 uppercase font-bold">Total del viaje</p>
           <p className="text-2xl font-black font-mono text-emerald-400">{formatCurrency(total)}</p>
         </div>
         <button onClick={handleExport}
@@ -93,28 +93,28 @@ export default function TripDetail({ viaje, onBack, onAddGasto, onUpdateGasto, o
         </h3>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Fecha</label>
+            <label className="block text-xs text-slate-400 mb-1">Fecha</label>
             <input type="date" value={fecha} onChange={e => setFecha(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm" />
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base" />
           </div>
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Importe (€) *</label>
+            <label className="block text-xs text-slate-400 mb-1">Importe (€) *</label>
             <input type="number" step="0.01" inputMode="decimal" value={importe} onChange={e => setImporte(e.target.value)}
               placeholder="0,00" required
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm font-bold" />
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base font-bold" />
           </div>
         </div>
         <div>
-          <label className="block text-[11px] text-slate-400 mb-1">Concepto *</label>
+          <label className="block text-xs text-slate-400 mb-1">Concepto *</label>
           <input type="text" value={concepto} onChange={e => setConcepto(e.target.value)}
             placeholder="ej. Cena en Trastevere" required
-            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm" />
+            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base" />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Forma de pago *</label>
+            <label className="block text-xs text-slate-400 mb-1">Forma de pago *</label>
             <select value={metodoPago} onChange={e => setMetodoPago(e.target.value)} required
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm">
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base">
               <option value="">Elegir...</option>
               {METODO_PAGO_GROUPS.map(group => (
                 <optgroup key={group.label} label={group.label}>
@@ -124,9 +124,9 @@ export default function TripDetail({ viaje, onBack, onAddGasto, onUpdateGasto, o
             </select>
           </div>
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Deuda</label>
+            <label className="block text-xs text-slate-400 mb-1">Deuda</label>
             <select value={deuda} onChange={e => setDeuda(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm">
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base">
               <option value="">Sin deuda</option>
               {DEUDA_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
             </select>
@@ -151,15 +151,15 @@ export default function TripDetail({ viaje, onBack, onAddGasto, onUpdateGasto, o
               return (
                 <div key={g.id} className="bg-slate-900 border border-emerald-700 rounded-2xl p-3 space-y-2">
                   <input type="text" value={editDraft.concepto} onChange={e => setEditDraft(d => ({ ...d, concepto: e.target.value }))}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-sm" />
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-base" />
                   <div className="grid grid-cols-2 gap-2">
                     <input type="date" value={editDraft.fecha} onChange={e => setEditDraft(d => ({ ...d, fecha: e.target.value }))}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-xs" />
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-base" />
                     <input type="number" step="0.01" value={editDraft.importe} onChange={e => setEditDraft(d => ({ ...d, importe: e.target.value }))}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-xs font-bold" />
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-base font-bold" />
                   </div>
                   <select value={editDraft.metodoPago} onChange={e => setEditDraft(d => ({ ...d, metodoPago: e.target.value }))}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-xs">
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-base">
                     {METODO_PAGO_GROUPS.map(group => (
                       <optgroup key={group.label} label={group.label}>
                         {group.options.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
@@ -181,7 +181,7 @@ export default function TripDetail({ viaje, onBack, onAddGasto, onUpdateGasto, o
               <div key={g.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 flex items-center gap-3">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-slate-100 truncate">{g.concepto}</p>
-                  <p className="text-[11px] text-slate-400 flex items-center gap-1.5 flex-wrap">
+                  <p className="text-xs text-slate-400 flex items-center gap-1.5 flex-wrap">
                     <span>{g.fecha}</span><span>·</span><span>{g.metodoPago}</span>
                     {g.deuda && <span className="text-amber-400">· {g.deuda}</span>}
                   </p>

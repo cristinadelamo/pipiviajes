@@ -4,6 +4,13 @@ html, body, #root {
   height: 100%;
 }
 
+/* Tamaño base de 18px (el que usa iOS para texto): escala a la vez letra, iconos y
+   espaciado, que en Tailwind van todos en rem. Con los 16px por defecto toda la
+   interfaz se quedaba pequeña en el móvil. */
+html {
+  font-size: 18px;
+}
+
 body {
   overscroll-behavior-y: contain;
 }

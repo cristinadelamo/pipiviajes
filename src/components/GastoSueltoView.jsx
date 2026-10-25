@@ -154,15 +154,15 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
 
       {showServidor && (
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-4 space-y-1.5">
-          <label className="block text-[11px] text-slate-400">Servidor de la principal (en casa)</label>
+          <label className="block text-xs text-slate-400">Servidor de la principal (en casa)</label>
           <input
             type="text"
             value={servidor.url}
             onChange={e => servidor.setUrl(e.target.value)}
             placeholder="https://ip-de-tu-router:puerto"
-            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm font-mono"
+            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base font-mono"
           />
-          <p className="text-[10px] text-slate-500">
+          <p className="text-xs text-slate-500">
             Solo funciona en la red de casa. Si es la primera vez, abre esa URL directamente
             en este navegador y acepta el aviso del certificado antes de sincronizar.
           </p>
@@ -172,7 +172,7 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-4 space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[11px] text-slate-400 uppercase font-bold">Total sin sincronizar</p>
+            <p className="text-xs text-slate-400 uppercase font-bold">Total sin sincronizar</p>
             <p className="text-2xl font-black font-mono text-emerald-400">{formatCurrency(total)}</p>
           </div>
           <div className="flex flex-col items-end gap-1.5">
@@ -181,7 +181,7 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
               <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} /> {syncing ? 'Sincronizando...' : 'Sincronizar'}
             </button>
             {gastos.length > 0 && (
-              <button onClick={handleExport} className="flex items-center gap-1 text-[10px] text-slate-500 active:text-slate-300">
+              <button onClick={handleExport} className="flex items-center gap-1 text-xs text-slate-500 active:text-slate-300">
                 <Download className="w-3 h-3" /> Exportar respaldo (.json)
               </button>
             )}
@@ -189,14 +189,14 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
         </div>
 
         {syncError && (
-          <div className="flex items-start gap-2 bg-red-950/60 border border-red-800 text-red-300 text-[11px] p-2.5 rounded-xl">
+          <div className="flex items-start gap-2 bg-red-950/60 border border-red-800 text-red-300 text-xs p-2.5 rounded-xl">
             <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
             {syncError}
           </div>
         )}
 
         {syncResult && (
-          <div className="flex items-start gap-2 bg-emerald-950/60 border border-emerald-800 text-emerald-300 text-[11px] p-2.5 rounded-xl">
+          <div className="flex items-start gap-2 bg-emerald-950/60 border border-emerald-800 text-emerald-300 text-xs p-2.5 rounded-xl">
             <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <span>
               {syncResult.ok} sincronizado{syncResult.ok !== 1 ? 's' : ''}.
@@ -212,35 +212,35 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
         </h3>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Fecha</label>
+            <label className="block text-xs text-slate-400 mb-1">Fecha</label>
             <input type="date" value={fecha} onChange={e => setFecha(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm" />
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base" />
           </div>
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Importe (€) *</label>
+            <label className="block text-xs text-slate-400 mb-1">Importe (€) *</label>
             <input type="number" step="0.01" inputMode="decimal" value={importe} onChange={e => setImporte(e.target.value)}
               placeholder="0,00" required
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm font-bold" />
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base font-bold" />
           </div>
         </div>
         <div>
-          <label className="block text-[11px] text-slate-400 mb-1">Concepto *</label>
+          <label className="block text-xs text-slate-400 mb-1">Concepto *</label>
           <input type="text" value={concepto} onChange={e => setConcepto(e.target.value)}
             placeholder="ej. Mercadona" required
-            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm" />
+            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base" />
         </div>
         <div>
-          <label className="block text-[11px] text-slate-400 mb-1">Cuenta *</label>
+          <label className="block text-xs text-slate-400 mb-1">Cuenta *</label>
           <select value={cuenta} onChange={e => setCuenta(e.target.value)}
-            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm">
+            className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base">
             {CUENTA_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
           </select>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Estado</label>
+            <label className="block text-xs text-slate-400 mb-1">Estado</label>
             <select value={estado} onChange={e => setEstado(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm">
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base">
               <option value="">Sin estado</option>
               {METODO_PAGO_GROUPS.map(group => (
                 <optgroup key={group.label} label={group.label}>
@@ -250,9 +250,9 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
             </select>
           </div>
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1">Deuda</label>
+            <label className="block text-xs text-slate-400 mb-1">Deuda</label>
             <select value={deuda} onChange={e => setDeuda(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-sm">
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-slate-100 text-base">
               <option value="">Sin deuda</option>
               {DEUDA_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
             </select>
@@ -268,7 +268,7 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
         {gastos.length > 0 && (
           <button
             onClick={() => { if (confirm('¿Vaciar la lista sin sincronizar? Se perderán los gastos que no se hayan volcado a la principal.')) onClearAll(); }}
-            className="text-[11px] text-slate-500 active:text-red-500"
+            className="text-xs text-slate-500 active:text-red-500"
           >
             Vaciar lista
           </button>
@@ -285,19 +285,19 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
               return (
                 <div key={g.id} className="bg-slate-900 border border-emerald-700 rounded-2xl p-3 space-y-2">
                   <input type="text" value={editDraft.concepto} onChange={e => setEditDraft(d => ({ ...d, concepto: e.target.value }))}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-sm" />
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-base" />
                   <div className="grid grid-cols-2 gap-2">
                     <input type="date" value={editDraft.fecha} onChange={e => setEditDraft(d => ({ ...d, fecha: e.target.value }))}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-xs" />
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-base" />
                     <input type="number" step="0.01" value={editDraft.importe} onChange={e => setEditDraft(d => ({ ...d, importe: e.target.value }))}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-xs font-bold" />
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-base font-bold" />
                   </div>
                   <select value={editDraft.cuenta} onChange={e => setEditDraft(d => ({ ...d, cuenta: e.target.value }))}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-xs">
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-base">
                     {CUENTA_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                   </select>
                   <select value={editDraft.estado} onChange={e => setEditDraft(d => ({ ...d, estado: e.target.value }))}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-xs">
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-100 text-base">
                     <option value="">Sin estado</option>
                     {METODO_PAGO_GROUPS.map(group => (
                       <optgroup key={group.label} label={group.label}>
@@ -320,7 +320,7 @@ export default function GastoSueltoView({ gastos, onAdd, onUpdate, onDelete, onC
               <div key={g.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 flex items-center gap-3">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-slate-100 truncate">{g.concepto}</p>
-                  <p className="text-[11px] text-slate-400 flex items-center gap-1.5 flex-wrap">
+                  <p className="text-xs text-slate-400 flex items-center gap-1.5 flex-wrap">
                     <span>{g.fecha}</span><span>·</span><span>{cuentaLabel(g.cuenta)}</span>
                     {g.estado && <span>· {g.estado}</span>}
                     {g.deuda && <span className="text-amber-400">· {g.deuda}</span>}

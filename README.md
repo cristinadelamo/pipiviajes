@@ -63,9 +63,9 @@ npm run dev
 2. Dentro del viaje, **Apuntar Gasto** cuantas veces haga falta (fecha, importe, concepto, forma de pago, y opcionalmente deuda).
 3. Al terminar, pulsa **Exportar** → descarga un `.json` con el nombre `viaje_<nombre>_<fecha>.json`.
 4. En casa, en PipiGastos → Modo Viaje → **Importar desde móvil** → selecciona ese `.json`.
-   Crea el viaje y todas sus líneas de desglose de golpe, exactamente igual que si las hubieras
-   apuntado a mano — con la salvedad de que ninguna línea queda vinculada todavía a un gasto
-   real de Comunes (eso se hace después, igual que con cualquier desglose).
+   Se abre un modal de revisión (código y sub-código por línea, papelera para excluir) y al
+   confirmar se crea el viaje y **cada gasto pasa a ser una línea real de Gastos Comunes**
+   ya vinculada al viaje, con su forma de pago y su deuda.
 
 ## Notas
 
@@ -73,5 +73,7 @@ npm run dev
   no se haya exportado — no hay copia en ningún otro sitio.
 - Gastos Sueltos y Viajes se guardan por separado en el móvil; puedes tener varios viajes
   guardados a la vez, cada uno se exporta por separado.
-- Reimportar el mismo `.json` de un viaje dos veces da un aviso en vez de duplicarlo. El
-  import de Gastos Sueltos no tiene esa detección — no reimportes el mismo fichero dos veces.
+- En un viaje largo puedes exportar y volcar a la principal cada día: al re-importar el
+  `.json` del mismo viaje, se añade al viaje ya existente y las líneas ya volcadas se
+  detectan y se saltan (no se duplican). El import de Gastos Sueltos no tiene esa
+  detección — no reimportes el mismo fichero dos veces.
