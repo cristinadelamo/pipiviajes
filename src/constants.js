@@ -15,13 +15,25 @@ export const METODO_PAGO_GROUPS = [
     label: 'Forma de pago',
     options: [
       { value: 'Metálico', label: 'Metálico' },
-      { value: 'Revolut Casa', label: 'Revolut Casa' },
-      { value: 'Revolut Javi', label: 'Revolut Javi' },
-      { value: 'Tarjeta Javi', label: 'Tarjeta Javi' },
-      { value: 'Tarjeta Xtina', label: 'Tarjeta Xtina' },
+      { value: 'Bizum', label: 'Bizum' },
+      { value: 'Revolut', label: 'Revolut' },
+      { value: 'Tarjeta', label: 'Tarjeta' },
     ],
   },
 ];
+
+// Unificación 2026-11: las formas de pago por persona se colapsan en una sola
+// (Tarjeta, Revolut) — quién pagó queda reflejado en el campo deuda. Igual que
+// en PipiGastos; se aplica también a lo ya guardado al cargar (localStorage).
+const UNIFICAR_METODO_PAGO = {
+  'Tarjeta Javi': 'Tarjeta',
+  'Tarjeta Xtina': 'Tarjeta',
+  'Revolut Casa': 'Revolut',
+  'Revolut Javi': 'Revolut',
+};
+
+export const unificarMetodoPago = (mp) =>
+  Object.hasOwn(UNIFICAR_METODO_PAGO, mp) ? UNIFICAR_METODO_PAGO[mp] : mp;
 
 export const DEUDA_OPTIONS = [
   { value: 'Pagas tú, te debo la mitad', label: 'Pagas tú, te debo la mitad' },

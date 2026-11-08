@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+import { unificarMetodoPago } from './constants';
 
 const STORAGE_KEY = 'kakebo_gastos_movil';
 
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    return raw ? JSON.parse(raw).map(g => ({ ...g, metodoPago: unificarMetodoPago(g.metodoPago) })) : [];
   } catch {
     return [];
   }
